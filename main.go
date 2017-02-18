@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"time"
 )
-// learning channels
+// learning channels v1
 func main() {
 	c:= make(chan int)
 
