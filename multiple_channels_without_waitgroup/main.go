@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 )
+//WAIT GROUP IS THE RIGHT WAY TO DO SO
 // using a channel to sync the action of 2 go routines instead of a waiting group
 func main() {
 	c:= make(chan int)
