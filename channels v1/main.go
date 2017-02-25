@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"time"
 )
-// learning channels v1
+// learning channels v1 un buffered channel
 func main() {
 	c:= make(chan int)
 
