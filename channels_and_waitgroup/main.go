@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"sync"
 )
-// using range to handle the waiting for the go routine
+// using range to synchronize the action of 2 go routines using waiting group
 func main() {
 	c:= make(chan int)
 	//creating and setting the wait group to wait for 2 dones
