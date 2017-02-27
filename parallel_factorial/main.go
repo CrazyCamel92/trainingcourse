@@ -10,20 +10,25 @@ func main() {
 	cors := runtime.NumCPU();
 	runtime.GOMAXPROCS(cors);
 
-	var nums = make([]int,30);
-	index:=0;
-	for i:=0;i<30;i++{
-		nums[i] = i;
-		index++
-	}
 
-	var ch =loadNumbers(nums);
+	numbers := genNumbers()
+	ch := loadNumbers(numbers);
 	out:=factorial(ch)
 	for n:= range out{
 		fmt.Println("out: "+ strconv.Itoa(n))
 	}
 
 }
+func genNumbers() []int  {
+	var numbers = make([]int,30);
+	index:=0;
+	for i:=0;i<30;i++{
+		numbers[i] = i;
+		index++
+	}
+	return  numbers;
+}
+
 func loadNumbers(numbers []int) chan int  {
 	c:= make(chan int);
 	go func() {
