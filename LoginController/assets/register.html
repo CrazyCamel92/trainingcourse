@@ -4,19 +4,26 @@
     <meta charset="UTF-8">
     <title>Encryption App</title>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js"></script>
-    <script src="index.js"></script>
+    <script src="app.js"></script>
 </head>
 <body>
-<div ng-controller="mainCtrl">
-    <label>username</label>
-    <input type="text" ng-model="username">
-    <label>password</label>
-    <input type="text" ng-model="password">
-    <button ng-click="login()">Click</button>
+<div ng-controller="registerCtrl">
     <br/>
-    {{result}}
+    <label>Name</label>
+    <input type="text" ng-model="name">
+    <br/>
+    <br/>
+    <label>Username</label>
+    <input type="text" ng-model="username">
+    <br/>
+    <br/>
+    <label>Password</label>
+    <input type="text" ng-model="password">
+    <br/>
+    <br/>
+    button ng-click="register()">Register</button>
+    <br/>
+    <br/>
 </div>
-
-
 </body>
 </html>

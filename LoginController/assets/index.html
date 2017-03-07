@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="app">
+<head>
+    <meta charset="UTF-8">
+    <title>Encryption App</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js"></script>
+    <script src="app.js"></script>
+    <script src="urlRouter.js"></script>
+</head>
+<body>
+<div ng-controller="mainCtrl">
+    <div ng-show="!authenticated">
+        <label>Username</label>
+        <input type="text" ng-model="username">
+        <label>Password</label>
+        <input type="text" ng-model="password">
+        <button ng-click="login()">Login</button>
+        <br/>
+    </div>
+    {{result}}
+</div>
+
+
+</body>
+</html>
