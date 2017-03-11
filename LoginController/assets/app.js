@@ -2,18 +2,16 @@ var app = angular.module('app', ['ui.router']);
 
 app.config(function($stateProvider, $urlRouterProvider) {
 
-    $urlRouterProvider.otherwise('/home');
+    $urlRouterProvider.otherwise('/login');
     $stateProvider
         .state('login', {
             url: '/login',
-            templateUrl: 'index.html',
-            controller: mainCtrl
+            templateUrl: 'login.html'
         })
 
         .state('register', {
             url: '/register',
-            templateUrl: 'register.html',
-            controller: registerCtrl
+            templateUrl: 'register.html'
         });
 });
 
@@ -31,19 +29,19 @@ app.controller("mainCtrl",function ($scope,$http) {
         $http.post("http://localhost:8080/login", jData).success(function(res, status) {
             $scope.username = "";
             $scope.password = "";
-            if(res == "true")
+            if(res == "false")
             {
-                $scope.authenticated =true;
-                $scope.result = "Welcome Back"
+                alert("Wrong Username or Password")
             }
             else
             {
-                alert("Wrong Username or Password")
+                $scope.authenticated =true;
+                $scope.result = res;
             }
         })
     }
 });
-app.controller("registerCtrl",function ($scope,$http) {
+app.controller("registerCtrl",function ($scope,$http,$state) {
     $scope.model = {
         name:"",
         username:"",
@@ -51,17 +49,18 @@ app.controller("registerCtrl",function ($scope,$http) {
     }
     $scope.result = "";
     $scope.authenticated = false;
-    $scope.login = function () {
+    $scope.register = function () {
         var jData =
             JSON.stringify({
-                username: $scope.model.username,
-                password:$scope.model.password,
+                credentials:{ username: $scope.model.username,
+                            password:$scope.model.password},
                 name:$scope.model.name
             });
-        $http.post("http://localhost:8080/login", jData).success(function(res, status) {
+        $http.post("http://localhost:8080/register", jData).success(function(res, status) {
             $scope.model.username = "";
             $scope.model.password = "";
             $scope.model.name = "";
+
 
             if(res == "true")
             {
@@ -69,7 +68,7 @@ app.controller("registerCtrl",function ($scope,$http) {
             }
             else
             {
-                alert("Wrong Username or Password")
+                alert(res)
             }
         })
 
