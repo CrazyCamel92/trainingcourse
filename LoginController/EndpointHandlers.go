@@ -6,9 +6,21 @@ import (
 	"fmt"
 	"log"
 	"github.com/nu7hatch/gouuid"
+	"unicode"
 )
 
-func LoginEndpoint(w http.ResponseWriter,req *http.Request) {
+type EndpointsManager struct {
+	dbHandler DbHandler
+}
+
+func NewEndpointsManager () *EndpointsManager {
+	_dbHandler :=DbHandler{ConnectionString:"localhost"}
+	var endpointsManager = new(EndpointsManager);
+	endpointsManager.dbHandler = _dbHandler;
+	return  endpointsManager
+}
+
+func (manager *EndpointsManager) LoginEndpoint(w http.ResponseWriter,req *http.Request) {
 	w.Header().Set("Access-Control-Allow-Origin", "*");
 	var userModel UserModel;
 
@@ -19,16 +31,17 @@ func LoginEndpoint(w http.ResponseWriter,req *http.Request) {
 	}
 	log.Println(cookie)
 	if(cookie != nil){
-		var cookieModel CookieModel
+		cookieModel:= CookieModel{}
 		json.Unmarshal([]byte(cookie.Value),&cookieModel)
-		log.Println("searching for id")
-		log.Println(cookieModel.Id)
-		userModel= GetUserById(cookieModel.Id)
+		userModel= manager.dbHandler.GetUserById(cookieModel.Id)
 	}else if(cookie == nil){
 		var loginModel LoginModel
 		_ = json.NewDecoder(req.Body).Decode(&loginModel)
-		userModel := GetUserByUsername(loginModel.Username)
+		userModel := manager.dbHandler.GetUserByUsername(loginModel.Username)
 		cookieModel:= CookieModel{Id:userModel.Id}
+		///////////////////////////
+		// need to convert to unicode before using marshal
+		////////////////////////////////////////
 		jString,_:= json.Marshal(&cookieModel)
 		cookieStr := string(jString)
 		http.SetCookie(w, &http.Cookie{
@@ -43,18 +56,18 @@ func LoginEndpoint(w http.ResponseWriter,req *http.Request) {
 	}
 }
 
-func RegisterEndpoint(w http.ResponseWriter,req *http.Request) {
+func (manager *EndpointsManager) RegisterEndpoint(w http.ResponseWriter,req *http.Request) {
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 	var registerModel UserModel
 	_ = json.NewDecoder(req.Body).Decode(&registerModel)
 
 	if (registerModel.Name != "" && registerModel.Credentials != LoginModel{}){
 
-		result:= GetUserByUsername(registerModel.Credentials.Username)
+		result:= manager.dbHandler.GetUserByUsername(registerModel.Credentials.Username)
 		if (result == UserModel{}) {
 			id,_:= uuid.NewV4()
 			registerModel.Id = id.String()
-			InsertUserIntoUsers(registerModel)
+			manager.dbHandler.InsertUserIntoUsers(registerModel)
 		}
 		fmt.Fprint(w, "true")
 	}else{

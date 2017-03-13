@@ -12,9 +12,10 @@ import (
 
 func main() {
 	router:= mux.NewRouter()
+	endpointsManager := NewEndpointsManager();
 	router.PathPrefix("/").Handler(http.StripPrefix("/",http.FileServer(http.Dir("assets/")))).Methods("GET")
-	router.HandleFunc("/login",LoginEndpoint)
-	router.HandleFunc("/register",RegisterEndpoint).Methods("POST")
+	router.HandleFunc("/login",endpointsManager.LoginEndpoint).Methods("POST")
+	router.HandleFunc("/register",endpointsManager.RegisterEndpoint).Methods("POST")
 	fmt.Println("starting server")
 	log.Fatal(http.ListenAndServe(":8080",router))
 }

@@ -1,8 +1,6 @@
 package main
 
 import (
-	/*"github.com/go-mgo/mgo"
-	"github.com/go-mgo/mgo/bson"*/
 	"gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
 	"fmt"
@@ -10,8 +8,12 @@ import (
 	"github.com/nu7hatch/gouuid"
 )
 
-func GetUserByUsername (username string) UserModel  {
-	session, err := mgo.Dial("localhost")
+type DbHandler struct {
+	ConnectionString string
+}
+
+func (db *DbHandler) GetUserByUsername (username string) UserModel  {
+	session, err := mgo.Dial(db.ConnectionString)
 	if err != nil {
 		panic(err)
 	}
@@ -38,8 +40,8 @@ func GetUserByUsername (username string) UserModel  {
 	return result;
 }
 
-func GetUserById (id string) UserModel  {
-	session, err := mgo.Dial("localhost")
+func (db *DbHandler) GetUserById (id string) UserModel  {
+	session, err := mgo.Dial(db.ConnectionString)
 	if err != nil {
 		panic(err)
 	}
@@ -66,8 +68,8 @@ func GetUserById (id string) UserModel  {
 
 	return result;
 }
-func InsertUserIntoUsers(user UserModel ) bool  {
-	session, err := mgo.Dial("localhost")
+func (db *DbHandler) InsertUserIntoUsers(user UserModel) bool  {
+	session, err := mgo.Dial(db.ConnectionString)
 	if err != nil {
 		panic(err)
 	}
