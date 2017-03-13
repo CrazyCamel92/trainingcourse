@@ -7,5 +7,9 @@ type LoginModel struct {
 type UserModel struct {
 	Credentials LoginModel `json:"credentials"`
 	Name string `json:"name"`
-
+	Id string `json:"id"`
 }
+type CookieModel struct {
+	Id string `json:"id"`
+}
+

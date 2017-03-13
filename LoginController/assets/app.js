@@ -40,6 +40,7 @@ app.controller("mainCtrl",function ($scope,$http) {
             }
         })
     }
+    init();
 });
 app.controller("registerCtrl",function ($scope,$http,$state) {
     $scope.model = {
