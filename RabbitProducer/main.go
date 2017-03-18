@@ -43,6 +43,7 @@ func NewMessage(msg string,queueData QueueData )  {
 		false,  // mandatory
 		false,  // immediate
 		amqp.Publishing {
+			DeliveryMode:amqp.Persistent,
 			ContentType: "text/plain",
 			Body:        []byte(body),
 		})
@@ -51,7 +52,7 @@ func NewMessage(msg string,queueData QueueData )  {
 
 func QueueHandler(queueName string) QueueData {
 	conn, err := amqp.Dial("amqp://guest:guest@localhost:5672/")
-	onError(err, "Failed to connect to RabbitMQ")
+	onError(err, "Failed to connect to server")
 	//defer conn.Close()
 
 	//creating rabbit mq channel

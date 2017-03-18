@@ -29,13 +29,16 @@ func (data QueueData) DisposeQueue ()  {
 
 func ConsumerInit(conStr string,queueName string ) QueueData  {
 	conn, err := amqp.Dial(conStr)
-	onError(err, "Failed to connect to RabbitMQ")
+	onError(err, "Failed to Server")
 	//defer conn.Close()
 
 	//this is a rabbit mq channel.
 	ch, err := conn.Channel()
 	onError(err, "Failed to open a channel")
 	//defer ch.Close()
+
+	// each worker will get only 1 message at a time
+	ch.Qos(1,0,false)
 
 	q, err := ch.QueueDeclare(
 		queueName, // name
@@ -66,7 +69,7 @@ func Consume(queueData QueueData)  {
 
 	go func() {
 		for d := range queueData.ResponseChannel {
-			// the consumer will sleep for 2 seconds in order to see multiple workers working togather
+			// the consumer will sleep for 2 seconds in order to see multiple workers working together
 			time.Sleep(2 * time.Second)
 			log.Printf("Received a message: %s", d.Body)
 		}
